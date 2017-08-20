@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">salut</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_out">Sign out</string>
+    <string name="hint_email">email</string>
+    <string name="hint_password">password</string>
+    <string name="desc_firebase_lockup">lock up</string>
+    <string name="loading">loading</string>
+    <string name="id_fmt">User ID: %s</string>
+    <string name="email_fmt">Email: %s</string>
 </resources>
