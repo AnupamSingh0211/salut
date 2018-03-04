@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,15 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.ArrayList;
 
 import hala.com.salut.models.ChatMessage;
 
@@ -27,6 +36,7 @@ public class MainActivityChatRoom extends AppCompatActivity {
 
     private static final int SIGN_IN_REQUEST_CODE = 99;
     private FirebaseListAdapter<ChatMessage> adapter;
+    ArrayList <ChatMessage> chatMessageArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +45,43 @@ public class MainActivityChatRoom extends AppCompatActivity {
         makeFirebaseSignIn();
         allowPostingOfMessages();
         addFireBaseListadapter();
+
+        String instanceId = FirebaseInstanceId.getInstance().getToken();
+        Log.d("@@@@", "token is: " + instanceId);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null && instanceId!=null) {
+            FirebaseDatabase.getInstance().getReference()
+                    .child("users")
+                    .child(firebaseUser.getUid())
+                    .child("instanceId")
+                    .setValue(instanceId);
+        }
+        getChatMessages();
+
+
+
+    }
+
+    private void getChatMessages() {
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                GenericTypeIndicator<ArrayList<ChatMessage>> t = new GenericTypeIndicator<ArrayList<ChatMessage>>() {};
+                chatMessageArrayList = snapshot.getValue(t);
+                if(chatMessageArrayList == null)
+                    chatMessageArrayList = new ArrayList<>();
+
+            }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+                Log.e("The read failed: " ,firebaseError.getMessage());
+            }
+        };
+        FirebaseDatabase.getInstance().getReference()
+                .child("users/messages").addValueEventListener(postListener);
+
+
     }
 
     private void addFireBaseListadapter() {
@@ -75,15 +122,17 @@ public class MainActivityChatRoom extends AppCompatActivity {
 
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database
-                FirebaseDatabase.getInstance()
-                        .getReference()
-                        .push()
-                        .setValue(new ChatMessage(input.getText().toString(),
-                                FirebaseAuth.getInstance()
-                                        .getCurrentUser()
-                                        .getDisplayName())
 
-                        );
+                chatMessageArrayList.add(new ChatMessage(input.getText().toString(),FirebaseAuth.getInstance()
+                        .getCurrentUser()
+                        .getDisplayName()));
+
+                FirebaseDatabase.getInstance().getReference()
+                        .child("users")
+                        .child(FirebaseAuth.getInstance()
+                                .getCurrentUser().getUid())
+                        .child("messages")
+                        .setValue(chatMessageArrayList);
 
                 // Clear the input
                 input.setText("");

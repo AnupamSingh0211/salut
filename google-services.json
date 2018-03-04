@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "533744188715",
+    "firebase_url": "https://salut-ab8ce.firebaseio.com",
+    "project_id": "salut-ab8ce",
+    "storage_bucket": "salut-ab8ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533744188715:android:c71c69f8915939d1",
+        "android_client_info": {
+          "package_name": "hala.com.salut"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533744188715-5hq8rfu69i817koquqqf5tf0g7v41nnf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hala.com.salut",
+            "certificate_hash": "c454a30fca7220aed19365f6bd7a0a3e0cad8047"
+          }
+        },
+        {
+          "client_id": "533744188715-haoksepv3q83h666mnn40c7q3fudkss8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9Vlqfyo5hT2RsTXP4wOWzLi2s9SwCDtw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533744188715-haoksepv3q83h666mnn40c7q3fudkss8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
